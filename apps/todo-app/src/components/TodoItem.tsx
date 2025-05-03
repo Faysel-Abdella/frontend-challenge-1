@@ -2,13 +2,14 @@ import { useState } from 'react';
 import { useSetRecoilState } from 'recoil';
 import { Draggable } from '@hello-pangea/dnd';
 import { todosState } from '../store/todoStore';
-import { Todo } from '../types/todo';
+import { Todo, TodoLabelColor } from '../types/todo';
 import { Check, Clock, Edit, Tag, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
+import { getLabelColorClasses, getTaskColorClass } from '@/lib/colorUtils';
 
 interface TodoItemProps {
   todo: Todo;
@@ -65,10 +66,22 @@ export default function TodoItem({ todo, index }: TodoItemProps) {
   return (
     <Card
       className={cn(
-        'p-4 transition-all duration-200 shadow-sm hover:shadow-md',
-        todo.completed ? 'bg-secondary/50' : 'bg-card'
+        'overflow-hidden',
+        todo.completed ? 'bg-secondary/50 border-secondary' : 'bg-card border',
+
+        todo.color && getTaskColorClass(todo.color as TodoLabelColor),
+        `relative p-4 transition-all duration-200 shadow-sm hover:shadow-md `
       )}
+      style={{ maxHeight: 'unset', height: 'fit-content' }}
     >
+      <div
+        className={cn(
+          'absolute w-2 h-full max-h-[40%] rounded-full my-auto self-center align-middle items-center justify-center left-5 top-1/2 bottom-1/2',
+          // getLabelColorClasses(todo.labelColor, true)
+          `bg-${todo.labelColor}-500`,
+          todo.completed ? 'opacity-40' : 'opacity-100'
+        )}
+      />
       <div className="flex items-start gap-3">
         <Checkbox
           checked={todo.completed}
@@ -77,78 +90,90 @@ export default function TodoItem({ todo, index }: TodoItemProps) {
         />
 
         <div className="flex-grow">
-          {isEditing ? (
-            <input
-              type="text"
-              value={editedTitle}
-              onChange={(e) => setEditedTitle(e.target.value)}
-              onBlur={handleSaveEdit}
-              onKeyDown={handleKeyDown}
-              autoFocus
-              className="w-full p-1 text-base font-medium border-b border-input focus:outline-none focus:border-primary"
-            />
-          ) : (
-            <div
-              className={cn(
-                'text-base font-medium',
-                todo.completed && 'line-through text-muted-foreground'
-              )}
-            >
-              {todo.title}
-            </div>
-          )}
-
-          {todo.description && (
-            <p className="mt-1 text-sm text-muted-foreground">
-              {todo.description}
-            </p>
-          )}
-
-          <div className="flex flex-wrap gap-2 mt-2 items-center">
-            {todo.label && (
-              <div className="flex items-center text-xs">
+          <div className="flex w-full justify-between">
+            <div className="flex flex-col">
+              {isEditing ? (
+                <input
+                  type="text"
+                  value={editedTitle}
+                  onChange={(e) => setEditedTitle(e.target.value)}
+                  onBlur={handleSaveEdit}
+                  onKeyDown={handleKeyDown}
+                  autoFocus
+                  className="w-full p-1 text-base font-medium border-b border-input focus:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50"
+                />
+              ) : (
                 <div
                   className={cn(
-                    'w-3 h-3 rounded-full mr-1',
-                    todo.labelColor
-                      ? `bg-todo-${todo.labelColor}`
-                      : 'bg-todo-gray'
+                    'text-lg font-semibold tracking-tight',
+                    todo.completed && 'line-through text-muted-foreground'
                   )}
-                ></div>
+                >
+                  {todo.title}
+                </div>
+              )}
+
+              {todo.description && (
+                <p className="mt-2 text-sm text-muted-foreground line-clamp-2">
+                  {todo.description}
+                </p>
+              )}
+            </div>
+            <div className="flex flex-col space-y-1 h-fit">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8"
+                onClick={handleEdit}
+              >
+                <Edit className="h-4 w-4" />
+              </Button>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="h-8 w-8 text-destructive"
+                onClick={handleDelete}
+              >
+                <Trash2 className="h-4 w-4" />
+              </Button>
+            </div>
+          </div>
+          <div
+            className={cn(
+              'mt-3 flex flex-wrap w-full gap-2 items-center',
+              todo.completed ? 'opacity-40' : 'opacity-100'
+            )}
+          >
+            {todo.label && (
+              <div
+                className={cn(
+                  'inline-flex items-center rounded-full px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50',
+                  getLabelColorClasses(todo.labelColor, false) // Use the function
+                )}
+              >
+                {todo.labelColor && (
+                  <span
+                    className={cn(
+                      'mr-1.5 h-2 w-2 rounded-full',
+                      `bg-${todo.labelColor}-500`
+                    )}
+                  />
+                )}
                 <Tag className="w-3 h-3 mr-1" />
                 <span>{todo.label}</span>
               </div>
             )}
 
             {todo.dueDate && (
-              <div className="flex items-center text-xs">
+              <div className="inline-flex items-center rounded-full border px-2.5 py-0.5 text-xs font-semibold transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-ring disabled:opacity-50">
                 <Clock className="w-3 h-3 mr-1" />
                 <span>
-                  {format(new Date(todo.dueDate), 'MMM d, yyyy')}
+                  {format(new Date(todo.dueDate), 'MMM d')}
                   {todo.dueTime && ` at ${todo.dueTime}`}
                 </span>
               </div>
             )}
           </div>
-        </div>
-
-        <div className="flex space-x-1">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8"
-            onClick={handleEdit}
-          >
-            <Edit className="h-4 w-4" />
-          </Button>
-          <Button
-            variant="ghost"
-            size="icon"
-            className="h-8 w-8 text-destructive"
-            onClick={handleDelete}
-          >
-            <Trash2 className="h-4 w-4" />
-          </Button>
         </div>
       </div>
     </Card>

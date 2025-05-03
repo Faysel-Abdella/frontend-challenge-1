@@ -109,9 +109,6 @@ export default function TodoList() {
           style={{ width: isSearching ? '100%' : 'auto' }}
           layout
         >
-          {/* <Label htmlFor="search" className={isSearching ? '' : 'sr-only'}>
-            Search Tasks
-          </Label> */}
           <Input
             id="search"
             type="text"
@@ -127,9 +124,8 @@ export default function TodoList() {
           <Search className="absolute left-2 top-1/2 -translate-y-1/2 text-muted-foreground w-4 h-4" />
         </motion.div>
         <div>
-          {/* <Label htmlFor="filter">Filter By</Label> */}
           <Select value={filter} onValueChange={setFilter}>
-            <SelectTrigger className="w-[280px]">
+            <SelectTrigger className="w-[120px] md:w-[200px] lg:w-[280px]">
               <SelectValue placeholder="Filter Tasks" />
             </SelectTrigger>
             <SelectContent>
@@ -145,11 +141,15 @@ export default function TodoList() {
 
       {layout === 'grid' && (
         <motion.div
-          className="grid gap-4 md:grid-cols-2 lg:grid-cols-3"
+          className="w-full"
           layout
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           exit={{ opacity: 0 }}
+          style={{
+            columns: 'auto 300px',
+            gap: '1rem',
+          }}
         >
           <AnimatePresence>
             {filteredTodos.map((todo, index) => (
@@ -160,6 +160,7 @@ export default function TodoList() {
                 animate="animate"
                 exit="exit"
                 transition={{ duration: 0.2, delay: index * 0.03 }}
+                className="break-inside-avoid mb-4"
               >
                 <TodoItem todo={todo} index={index} />
               </motion.div>
