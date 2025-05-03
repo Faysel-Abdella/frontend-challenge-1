@@ -1,7 +1,12 @@
-import { useState } from 'react';
-import { useSetRecoilState } from 'recoil';
+import React, { useState } from 'react';
+import { useSetRecoilState, useRecoilState } from 'recoil';
 import { Draggable } from '@hello-pangea/dnd';
-import { todosState } from '../store/todoStore';
+import {
+  todosState,
+  formModeState,
+  formDataState,
+  formOpenState,
+} from '../store/todoStore';
 import { Todo, TodoLabelColor } from '../types/todo';
 import { Check, Clock, Edit, Tag, Trash2 } from 'lucide-react';
 import { Button } from '@/components/ui/button';
@@ -16,10 +21,27 @@ interface TodoItemProps {
   index: number;
 }
 
+// Define a type for the form data.  This should match the data
+// structure that your form component expects.
+interface TodoFormData {
+  id: string;
+  title: string;
+  description?: string;
+  dueDate?: string;
+  dueTime?: string;
+  label?: string;
+  labelColor?: TodoLabelColor;
+  status: string;
+  color?: string;
+}
+
 export default function TodoItem({ todo, index }: TodoItemProps) {
   const setTodos = useSetRecoilState(todosState);
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
+  const [, setFormMode] = useRecoilState(formModeState);
+  const [, setFormData] = useRecoilState(formDataState);
+  const [, setFormOpen] = useRecoilState(formOpenState);
 
   const handleToggleComplete = () => {
     setTodos((prevTodos) =>
@@ -40,7 +62,21 @@ export default function TodoItem({ todo, index }: TodoItemProps) {
   };
 
   const handleEdit = () => {
-    setIsEditing(true);
+    // Populate the form with the todo data.
+    const formData: TodoFormData = {
+      id: todo.id,
+      title: todo.title,
+      description: todo.description,
+      dueDate: todo.dueDate,
+      dueTime: todo.dueTime,
+      label: todo.label,
+      labelColor: todo.labelColor,
+      status: todo.status,
+      color: todo.color,
+    };
+    setFormData(formData);
+    setFormMode('edit'); // Set the form mode to 'edit'
+    setFormOpen(true); // Open the form
   };
 
   const handleSaveEdit = () => {
@@ -68,8 +104,7 @@ export default function TodoItem({ todo, index }: TodoItemProps) {
       className={cn(
         'overflow-hidden',
         todo.completed ? 'bg-secondary/50 border-secondary' : 'bg-card border',
-
-        todo.color && getTaskColorClass(todo.color as TodoLabelColor),
+        // todo.color && getTaskColorClass(todo.color as TodoLabelColor),
         `relative p-4 transition-all duration-200 shadow-sm hover:shadow-md `
       )}
       style={{ maxHeight: 'unset', height: 'fit-content' }}
@@ -77,8 +112,7 @@ export default function TodoItem({ todo, index }: TodoItemProps) {
       <div
         className={cn(
           'absolute w-2 h-full max-h-[40%] rounded-full my-auto self-center align-middle items-center justify-center left-5 top-1/2 bottom-1/2',
-          // getLabelColorClasses(todo.labelColor, true)
-          `bg-${todo.labelColor}-500`,
+          `bg-${todo.color}-500`,
           todo.completed ? 'opacity-40' : 'opacity-100'
         )}
       />

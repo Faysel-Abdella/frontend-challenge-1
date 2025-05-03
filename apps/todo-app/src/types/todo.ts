@@ -11,6 +11,7 @@ export interface Todo {
   status: TodoStatus;
   icon?: string | null; // Add the icon property
   color?: string 
+  
 }
 
 export type TodoLabelColor =
