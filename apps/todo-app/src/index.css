@@ -34,6 +34,16 @@
     --ring: 260 80% 50%;
 
     --radius: 0.75rem;
+
+    --todo-red: #f44336;
+    --todo-blue: #2196f3;
+    --todo-green: #4caf50;
+    --todo-yellow: #ffeb3b;
+    --todo-purple: #9c27b0;
+    --todo-pink: #e91e63;
+    --todo-indigo: #3f51b5;
+    --todo-gray: #607d8b;
+    
   }
 }
 

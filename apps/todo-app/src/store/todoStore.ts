@@ -1,16 +1,17 @@
-
 import { atom, selector } from 'recoil';
-import { Todo, TodoStatus } from '../types/todo';
+import { Todo, TodoLabelColor, TodoStatus } from '../types/todo';
 import { v4 as uuidv4 } from 'uuid';
 
 // Local storage persistence
-const localStorageEffect = (key: string) => ({ setSelf, onSet }: any) => {
+import { AtomEffect } from 'recoil';
+
+const localStorageEffect = <T extends { length: number }>(key: string): AtomEffect<T> => ({ setSelf, onSet }) => {
   const savedValue = localStorage.getItem(key);
   if (savedValue != null) {
     setSelf(JSON.parse(savedValue));
   }
 
-  onSet((newValue: any) => {
+  onSet((newValue: T) => {
     if (newValue.length === 0) {
       localStorage.removeItem(key);
     } else {
@@ -27,7 +28,7 @@ export const todosState = atom<Todo[]>({
 });
 
 // Filter atom
-export const todoFilterState = atom<TodoStatus | 'all'>({
+export const todoFilterState = atom<string>({
   key: 'todoFilterState',
   default: 'all',
 });
@@ -46,20 +47,41 @@ export const filteredTodosState = selector({
     const filter = get(todoFilterState);
     const searchQuery = get(todoSearchState).toLowerCase();
 
-    return todos
-      .filter(todo => {
-        const matchesFilter = filter === 'all' || todo.status === filter;
-        const matchesSearch = 
-          todo.title.toLowerCase().includes(searchQuery) || 
-          (todo.description?.toLowerCase().includes(searchQuery) || false) ||
-          (todo.label?.toLowerCase().includes(searchQuery) || false);
-        
-        return matchesFilter && matchesSearch;
-      })
-      .sort((a, b) => {
-        // Sort by creation date, newest first
-        return new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime();
-      });
+    let filtered = [...todos];
+
+    // Search filter
+    if (searchQuery) {
+      filtered = filtered.filter(
+        (todo) =>
+          todo.title.toLowerCase().includes(searchQuery) ||
+          (todo.description && todo.description.toLowerCase().includes(searchQuery)) ||
+          (todo.label && todo.label.toLowerCase().includes(searchQuery))
+      );
+    }
+
+    // Main filters
+    switch (filter) {
+      case 'incomplete':
+        filtered = filtered.filter((todo) => !todo.completed);
+        break;
+      case 'completed':
+        filtered = filtered.filter((todo) => todo.completed);
+        break;
+      case 'deadlinePassed':
+        filtered = filtered.filter(
+          (todo) => todo.dueDate && new Date(todo.dueDate) < new Date() && !todo.completed
+        );
+        break;
+      case 'latestCreated':
+        filtered = [...filtered].sort(
+          (a, b) => new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+        );
+        break;
+      default:
+        break;
+    }
+
+    return filtered;
   },
 });
 
@@ -68,18 +90,20 @@ export const groupedTodosState = selector({
   key: 'groupedTodosState',
   get: ({ get }) => {
     const todos = get(todosState);
-    
+
     return {
-      todo: todos.filter(todo => todo.status === 'todo'),
-      'in-progress': todos.filter(todo => todo.status === 'in-progress'),
-      done: todos.filter(todo => todo.status === 'done')
+      todo: todos.filter((todo) => todo.status === 'todo'),
+      'in-progress': todos.filter((todo) => todo.status === 'in-progress'),
+      done: todos.filter((todo) => todo.status === 'done'),
     };
   },
 });
 
-// Helper functions for CRUD operations
+// Helper functions for CRUD operations of the todo
 export const createTodo = (
-  todoData: Omit<Todo, 'id' | 'createdAt' | 'completed'>
+  todoData: Omit<Todo, 'id' | 'createdAt' | 'completed'> & {
+    icon?: string | null;
+  }
 ): Todo => {
   return {
     id: uuidv4(),
@@ -92,5 +116,26 @@ export const createTodo = (
     label: todoData.label,
     labelColor: todoData.labelColor,
     status: todoData.status,
+    icon: todoData.icon || null, // Include the icon here
   };
+};
+
+export const updateTodo = (
+  todos: Todo[],
+  todoId: string,
+  updatedTodoData: Partial<Omit<Todo, 'id' | 'createdAt'>>
+): Todo[] => {
+  return todos.map((todo) =>
+    todo.id === todoId ? { ...todo, ...updatedTodoData } : todo
+  );
+};
+
+export const deleteTodo = (todos: Todo[], todoId: string): Todo[] => {
+  return todos.filter((todo) => todo.id !== todoId);
+};
+
+export const toggleTodoCompletion = (todos: Todo[], todoId: string): Todo[] => {
+  return todos.map((todo) =>
+    todo.id === todoId ? { ...todo, completed: !todo.completed } : todo
+  );
 };
