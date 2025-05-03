@@ -8,7 +8,7 @@ import TodoList from '@/components/TodoList';
 const Index = () => {
   return (
     <RecoilRoot>
-      <div className="container py-8 max-w-7xl mx-auto">
+      <div className="p-4 py-8 max-w-7xl mx-auto">
         <TodoForm />
         <TodoList />
 

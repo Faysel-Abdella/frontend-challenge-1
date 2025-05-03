@@ -88,9 +88,9 @@ export default function TodoList() {
   }, [todos, filter, searchQuery]);
 
   return (
-    <div>
+    <div className="w-full max-w-5xl mx-auto">
       <motion.div
-        className="mb-4 flex items-center space-x-4"
+        className="mb-4 flex  items-center space-x-4"
         layout // Enable layout animation for width change
       >
         {!isSearching && (

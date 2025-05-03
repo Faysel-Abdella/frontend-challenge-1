@@ -206,8 +206,9 @@ export default function TodoForm() {
       animate={{ opacity: 1, y: 0 }}
       exit={{ opacity: 0, y: -10 }}
       transition={{ duration: 0.2 }}
+      className="w-full max-w-5xl mx-auto"
     >
-      <Card className="p-6 mb-8 shadow-sm">
+      <Card className="p-3 md:p-6 mb-8 shadow-sm">
         <form onSubmit={handleSubmit}>
           <motion.div layout className="space-y-4">
             <motion.div layout>
@@ -443,14 +444,15 @@ export default function TodoForm() {
                   </div>
                 </div>
 
-                <div className="flex justify-end gap-2 pt-4">
-                  <Button type="reset" variant="ghost" onClick={resetForm}>
+                <div className=" flex justify-end gap-2 pt-4">
+                  <Button type="reset" variant="outline" onClick={resetForm}>
                     Cancel
                   </Button>
                   <Button
                     type="submit"
-                    className="bg-blue-600 hover:bg-blue-700 text-white"
+                    className="bg-primary hover:bg-primary/70 text-white"
                   >
+                    <Plus />
                     Add Task
                   </Button>
                 </div>
