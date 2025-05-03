@@ -1,18 +1,20 @@
-
 import { render, screen, fireEvent } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
-import TodoItem from '../TodoItem';
+import TodoItem from '../DragDropTodoItem';
 import { Todo } from '../../types/todo';
 import { vi, describe, it, expect } from 'vitest';
 
 // Mock the DnD context properly
 vi.mock('@hello-pangea/dnd', () => ({
-  Draggable: ({ children }: { children: any }) => 
-    children({
-      draggableProps: {},
-      dragHandleProps: {},
-      innerRef: vi.fn(),
-    }, {}),
+  Draggable: ({ children }: { children: any }) =>
+    children(
+      {
+        draggableProps: {},
+        dragHandleProps: {},
+        innerRef: vi.fn(),
+      },
+      {}
+    ),
 }));
 
 describe('TodoItem Component', () => {
@@ -48,7 +50,7 @@ describe('TodoItem Component', () => {
 
     const checkbox = screen.getByRole('checkbox');
     fireEvent.click(checkbox);
-    
+
     // Since we can't test Recoil state directly in this unit test,
     // we verify that the click event happens without errors
     expect(checkbox).not.toBeDisabled();

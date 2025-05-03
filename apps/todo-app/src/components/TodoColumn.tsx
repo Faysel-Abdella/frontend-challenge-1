@@ -1,6 +1,5 @@
-
 import { Todo, TodoStatus } from '../types/todo';
-import TodoItem from './TodoItem';
+import TodoItem from './DragDropTodoItem';
 import { Droppable } from '@hello-pangea/dnd';
 import { cn } from '@/lib/utils';
 
@@ -13,16 +12,18 @@ interface TodoColumnProps {
 export default function TodoColumn({ title, todos, status }: TodoColumnProps) {
   return (
     <div className="flex flex-col w-full min-w-[300px] bg-secondary/50 rounded-lg p-4">
-      <h2 className="text-lg font-semibold mb-3">{title} ({todos.length})</h2>
-      
+      <h2 className="text-lg font-semibold mb-3">
+        {title} ({todos.length})
+      </h2>
+
       <Droppable droppableId={status}>
         {(provided, snapshot) => (
           <div
             ref={provided.innerRef}
             {...provided.droppableProps}
             className={cn(
-              "flex-grow min-h-[200px] transition-colors",
-              snapshot.isDraggingOver ? "bg-accent/40" : ""
+              'flex-grow min-h-[200px] transition-colors',
+              snapshot.isDraggingOver ? 'bg-accent/40' : ''
             )}
           >
             {todos.map((todo, index) => (
