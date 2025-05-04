@@ -7,7 +7,7 @@
       "todo-app"
     ]
   },
-  "dependencies": {
+  "devDependencies": {
     "cypress": "^14.3.2"
   }
 }
