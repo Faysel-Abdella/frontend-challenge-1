@@ -6,10 +6,6 @@ on:
       - main
   pull_request:
 
-permissions:
-  actions: read
-  contents: read
-
 jobs:
   main:
     runs-on: ubuntu-latest
@@ -32,9 +28,9 @@ jobs:
       - name: Install Dependencies
         run: pnpm install --frozen-lockfile
 
-      - name: Install Cypress dependencies
+      - name: Install Cypress
         run: |
-          pnpm add -D cypress
+          pnpm add -D cypress -w
           pnpm exec cypress install
 
       - uses: nrwl/nx-set-shas@v4
