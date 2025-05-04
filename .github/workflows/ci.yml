@@ -16,27 +16,26 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Required for Nx to calculate affected projects
+          fetch-depth: 0
+
+      - name: Setup pnpm
+        uses: pnpm/action-setup@v4
+        with:
+          version: 8
 
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: 20
-          cache: pnpm # Use pnpm for caching
-
-      - name: Setup pnpm
-        uses: pnpm/action-setup@v4 # Updated to latest version
-        with:
-          version: 8 # Matches your specified version
+          cache: pnpm
 
       - name: Install Dependencies
-        run: pnpm install --frozen-lockfile # Ensures exact versions from pnpm-lock.yaml
+        run: pnpm install --frozen-lockfile
 
       - name: Install Cypress
         run: npx cypress install
-        if: contains(github.event_name, 'pull_request') || github.event_name == 'push' # Run only for relevant events
 
-      - uses: nrwl/nx-set-shas@v4 # Sets base and head SHAs for Nx affected
+      - uses: nrwl/nx-set-shas@v4
 
       - name: Run Nx Commands
-        run: pnpm nx affected -t lint test build e2e # Use pnpm to run Nx commands
+        run: pnpm nx affected -t lint test build e2e
