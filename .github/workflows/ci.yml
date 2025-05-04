@@ -26,20 +26,23 @@ jobs:
           cache: pnpm
 
       - name: Install Dependencies
-        run: |
-          pnpm install --frozen-lockfile
-          # Install Cypress without quiet flag
-          pnpm add -D cypress@latest -w
-          pnpm exec cypress install
+        run: pnpm install --frozen-lockfile
 
-      - uses: nrwl/nx-set-shas@v4
-
-      - name: Verify Cypress Installation
+      - name: Debug Environment
         run: |
-          ls -la node_modules/cypress
-          ls -la ~/.cache/Cypress
+          echo "Node version: $(node -v)"
+          echo "PNPM version: $(pnpm -v)"
+          echo "Nx version: $(pnpm nx --version)"
 
-      - name: Run Nx Commands
-        run: |
-          pnpm nx affected -t lint test build
-          pnpm nx affected -t e2e
+      - name: Run Lint
+        run: pnpm nx affected --target=lint --parallel=1
+
+      - name: Run Tests
+        run: pnpm nx affected --target=test --parallel=1
+
+      - name: Run Build
+        run: pnpm nx affected --target=build --parallel=1
+
+      - name: Run E2E (if needed)
+        if: success()
+        run: pnpm nx affected --target=e2e --parallel=1
