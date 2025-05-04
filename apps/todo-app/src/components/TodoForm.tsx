@@ -38,7 +38,7 @@ export default function TodoForm() {
   } = useTodoForm();
 
   return (
-    <Card className="p-3 md:p-6 mb-8 shadow-sm w-full max-w-5xl mx-auto">
+    <Card className="p-3 md:p-6 mt-16 mb-10 shadow-sm w-full max-w-5xl mx-auto">
       <form onSubmit={handleSubmit}>
         <div className="space-y-4">
           <div>
