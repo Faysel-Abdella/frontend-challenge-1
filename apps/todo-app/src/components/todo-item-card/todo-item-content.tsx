@@ -31,8 +31,6 @@ export function TodoItemContent({
   onDelete,
   onEdit,
 }: TodoItemContentProps) {
-  console.log('TodoItemContent', todo.labelColor);
-
   const [isEditing, setIsEditing] = useState(false);
   const [editedTitle, setEditedTitle] = useState(todo.title);
   const setTodos = useSetRecoilState(todosState);
@@ -158,8 +156,6 @@ interface TodoItemFooterProps {
 }
 
 function TodoItemFooter({ todo }: TodoItemFooterProps) {
-  console.log('todo footer', todo);
-
   return (
     <div className="mt-2 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
       {todo.label && (

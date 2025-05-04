@@ -1,23 +1,42 @@
 import React, { useState } from 'react';
 import { Button } from '@/components/ui/button';
-import { Menu, X } from 'lucide-react';
+import { Home, Menu, X } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import {
   ListChecks, // For tasks page
   BarChart, // For statistics page
 } from 'lucide-react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
+import { cn } from '@/lib/utils';
 
 // Define the types
 interface NavItem {
   label: string;
-  onClick: () => void;
-  icon?: React.FC<React.SVGProps<SVGSVGElement>>;
   href: string;
+  icon?: React.FC<React.SVGProps<SVGSVGElement>>;
 }
 
-const Navbar = ({ navItems }: { navItems: NavItem[] }) => {
+const Navbar = () => {
   const [isMobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const location = useLocation();
+
+  const navItems: NavItem[] = [
+    {
+      label: 'Home',
+      href: '/',
+      icon: Home,
+    },
+    {
+      label: 'Tasks',
+      href: '/tasks',
+      icon: ListChecks,
+    },
+    {
+      label: 'Statistics',
+      href: '/statistics',
+      icon: BarChart,
+    },
+  ];
 
   return (
     <nav className="max-w-6xl mx-auto lg:mt-4  border-b border-border py-4">
@@ -28,15 +47,24 @@ const Navbar = ({ navItems }: { navItems: NavItem[] }) => {
 
         {/* Desktop Navigation */}
         <div className="hidden md:flex items-center gap-2">
-          {navItems.map((item) => (
-            <Link
-              key={item.label}
-              to={item.href}
-              className="flex items-center gap-1.5  rounded-full hover:bg-primary/5 hover:font-semibold transition-all duration-300  px-4 py-1" // Added class for icon spacing
-            >
-              {item.icon && <item.icon className="h-4 w-4" />} {item.label}
-            </Link>
-          ))}
+          {navItems.map((item) => {
+            const isActive = location.pathname === item.href;
+            return (
+              <Link
+                key={item.label}
+                to={item.href}
+                className={cn(
+                  'flex items-center gap-1.5 rounded-full px-4 py-1 transition-all duration-300',
+                  'hover:bg-primary/5 hover:font-semibold',
+                  isActive
+                    ? 'bg-primary/10 font-semibold text-primary' // Active page style
+                    : 'text-foreground'
+                )}
+              >
+                {item.icon && <item.icon className="h-4 w-4" />} {item.label}
+              </Link>
+            );
+          })}
         </div>
 
         {/* Mobile Menu Button */}
@@ -63,20 +91,26 @@ const Navbar = ({ navItems }: { navItems: NavItem[] }) => {
               exit={{ opacity: 0, y: -10 }}
               className="absolute top-16 right-4 bg-card border border-border rounded-md shadow-lg p-1 space-y-1 w-48"
             >
-              {navItems.map((item) => (
-                <Button
-                  key={item.label}
-                  variant="ghost"
-                  className="w-full justify-start flex items-center gap-2 rounded-full hover:bg-primary/5 hover:font-semibold transition-all duration-300" // Added class for icon
-                  onClick={() => {
-                    item.onClick();
-                    setMobileMenuOpen(false);
-                  }}
-                >
-                  {item.icon && <item.icon className="h-4 w-4" />}
-                  {item.label}
-                </Button>
-              ))}
+              {navItems.map((item) => {
+                const isActive = location.pathname === item.href;
+                return (
+                  <Link
+                    key={item.label}
+                    to={item.href}
+                    className={cn(
+                      'w-full justify-start flex items-center gap-2 rounded-full px-4 py-1 transition-all duration-300',
+                      'hover:bg-primary/5 hover:font-semibold',
+                      isActive
+                        ? 'bg-primary/10 font-semibold text-primary-foreground' // Active page style
+                        : 'text-foreground'
+                    )}
+                    onClick={() => setMobileMenuOpen(false)}
+                  >
+                    {item.icon && <item.icon className="h-4 w-4" />}
+                    {item.label}
+                  </Link>
+                );
+              })}
             </motion.div>
           )}
         </AnimatePresence>
