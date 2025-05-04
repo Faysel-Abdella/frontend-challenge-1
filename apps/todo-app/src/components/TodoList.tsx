@@ -1,7 +1,7 @@
 import { todosState } from '@/store/todoStore';
 import React, { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import TodoItem from './TodoItem';
+import TodoItem from './DragDropTodoItem';
 import {
   Select,
   SelectContent,

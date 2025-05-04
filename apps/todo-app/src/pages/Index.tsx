@@ -5,17 +5,15 @@ import HeroSection from '@/components/HeroSection';
 
 const Index = () => {
   return (
-    <RecoilRoot>
-      <div className="p-4 lg:py-4 max-w-7xl mx-auto">
-        <HeroSection />
-        <TodoForm />
-        <TodoList />
+    <div className="p-4 lg:py-4 max-w-7xl mx-auto">
+      <HeroSection />
+      <TodoForm />
+      <TodoList />
 
-        {/* <TodoStats />
+      {/* <TodoStats />
         <TodoSearch />
         <TodoBoard /> */}
-      </div>
-    </RecoilRoot>
+    </div>
   );
 };
 

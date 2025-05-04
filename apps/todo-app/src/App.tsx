@@ -9,6 +9,7 @@ import Tasks from './pages/Tasks';
 import Statistics from './pages/Statistics';
 import Navbar from './components/AppNavbar';
 import { ChartColumnStacked, ChartSpline, Home } from 'lucide-react';
+import { RecoilRoot } from 'recoil';
 // import { Home, ChartColumnStacked, ChartSpline } from './icons'; // Adjust the path as needed
 
 const queryClient = new QueryClient();
@@ -34,19 +35,21 @@ const navLinks = [
 ];
 
 const App = () => (
-  <TooltipProvider>
-    <Toaster />
-    <Sonner />
-    <BrowserRouter>
-      <Navbar navItems={navLinks} />
-      <Routes>
-        <Route path="/" element={<Index />} />
-        <Route path="/tasks" element={<Tasks />} />
-        <Route path="/statistics" element={<Statistics />} />
-        <Route path="*" element={<NotFound />} />
-      </Routes>
-    </BrowserRouter>
-  </TooltipProvider>
+  <RecoilRoot>
+    <TooltipProvider>
+      <Toaster />
+      <Sonner />
+      <BrowserRouter>
+        <Navbar navItems={navLinks} />
+        <Routes>
+          <Route path="/" element={<Index />} />
+          <Route path="/tasks" element={<Tasks />} />
+          <Route path="/statistics" element={<Statistics />} />
+          <Route path="*" element={<NotFound />} />
+        </Routes>
+      </BrowserRouter>
+    </TooltipProvider>
+  </RecoilRoot>
 );
 
 export default App;
