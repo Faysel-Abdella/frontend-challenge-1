@@ -8,12 +8,12 @@ import {
 } from 'lucide-react';
 import { Link } from 'react-router-dom';
 
-// Define the type for the navigation items
+// Define the types
 interface NavItem {
   label: string;
   onClick: () => void;
-  icon?: React.FC<React.SVGProps<SVGSVGElement>>; // Optional icon
-  href: string; // Add href for navigation
+  icon?: React.FC<React.SVGProps<SVGSVGElement>>;
+  href: string;
 }
 
 const Navbar = ({ navItems }: { navItems: NavItem[] }) => {
@@ -31,12 +31,10 @@ const Navbar = ({ navItems }: { navItems: NavItem[] }) => {
           {navItems.map((item) => (
             <Link
               key={item.label}
-              to={item.href} // Added href for navigation
+              to={item.href}
               className="flex items-center gap-1.5  rounded-full hover:bg-primary/5 hover:font-semibold transition-all duration-300  px-4 py-1" // Added class for icon spacing
             >
-              {item.icon && <item.icon className="h-4 w-4" />}{' '}
-              {/* Render icon if provided */}
-              {item.label}
+              {item.icon && <item.icon className="h-4 w-4" />} {item.label}
             </Link>
           ))}
         </div>
@@ -72,7 +70,7 @@ const Navbar = ({ navItems }: { navItems: NavItem[] }) => {
                   className="w-full justify-start flex items-center gap-2 rounded-full hover:bg-primary/5 hover:font-semibold transition-all duration-300" // Added class for icon
                   onClick={() => {
                     item.onClick();
-                    setMobileMenuOpen(false); // Close menu on item click
+                    setMobileMenuOpen(false);
                   }}
                 >
                   {item.icon && <item.icon className="h-4 w-4" />}

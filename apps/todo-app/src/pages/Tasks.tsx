@@ -1,5 +1,5 @@
 import React from 'react';
-import TodoBoard from '@/components/TodoBoard';
+import TodoBoard from '@/components/todo-board';
 
 export default function Tasks() {
   return (

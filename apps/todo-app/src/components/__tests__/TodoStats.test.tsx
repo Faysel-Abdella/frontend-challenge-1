@@ -1,7 +1,6 @@
-
 import { render, screen } from '@testing-library/react';
 import { RecoilRoot } from 'recoil';
-import TodoStats from '../TodoStats';
+import TodoStats from '../todo-stats';
 import { todosState } from '../../store/todoStore';
 import { Todo } from '../../types/todo';
 import { describe, it, expect } from 'vitest';
@@ -27,6 +26,7 @@ describe('TodoStats Component', () => {
         createdAt: new Date().toISOString(),
         status: 'done',
         description: '',
+        labelColor: 'blue',
       },
       {
         id: '2',
@@ -35,7 +35,8 @@ describe('TodoStats Component', () => {
         createdAt: new Date().toISOString(),
         status: 'todo',
         description: '',
-      }
+        labelColor: 'red',
+      },
     ];
 
     render(

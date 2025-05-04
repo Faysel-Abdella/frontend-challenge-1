@@ -7,7 +7,7 @@ import Index from './pages/Index';
 import NotFound from './pages/NotFound';
 import Tasks from './pages/Tasks';
 import Statistics from './pages/Statistics';
-import Navbar from './components/AppNavbar';
+import Navbar from './components/app-navbar';
 import { ChartColumnStacked, ChartSpline, Home } from 'lucide-react';
 import { RecoilRoot } from 'recoil';
 // import { Home, ChartColumnStacked, ChartSpline } from './icons'; // Adjust the path as needed

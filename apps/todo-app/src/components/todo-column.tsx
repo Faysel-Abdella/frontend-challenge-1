@@ -1,7 +1,8 @@
 import { Todo, TodoStatus } from '../types/todo';
-import TodoItem from './DragDropTodoItem';
 import { Droppable } from '@hello-pangea/dnd';
 import { cn } from '@/lib/utils';
+import TodoItem from './todo-item-card/todo-item';
+// import TodoItem from './TodoItem';
 
 interface TodoColumnProps {
   title: string;

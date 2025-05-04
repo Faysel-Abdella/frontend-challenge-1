@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react';
 import { useRecoilState, useRecoilValue } from 'recoil';
 import { DragDropContext, DropResult } from '@hello-pangea/dnd';
 import { todosState, groupedTodosState } from '../store/todoStore';
-import TodoColumn from './TodoColumn';
+import TodoColumn from './todo-column';
 import { useToast } from '@/hooks/use-toast';
 
 export default function TodoBoard() {

@@ -1,7 +1,6 @@
 import { todosState } from '@/store/todoStore';
 import React, { useState, useEffect } from 'react';
 import { useRecoilState } from 'recoil';
-import TodoItem from './DragDropTodoItem';
 import {
   Select,
   SelectContent,
@@ -15,6 +14,7 @@ import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Todo } from '@/types/todo';
+import TodoItem from './todo-item-card/todo-item';
 
 const filterOptions = [
   { value: 'all', label: 'All' },

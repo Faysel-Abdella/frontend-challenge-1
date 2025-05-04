@@ -1,7 +1,7 @@
 import { RecoilRoot } from 'recoil';
-import TodoForm from '../components/TodoForm';
-import TodoList from '@/components/TodoList';
-import HeroSection from '@/components/HeroSection';
+import TodoForm from '../components/todo-form';
+import TodoList from '@/components/todo-list';
+import HeroSection from '@/components/hero-section';
 
 const Index = () => {
   return (
