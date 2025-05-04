@@ -16,27 +16,25 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
-          filter: tree:0
-          fetch-depth: 0
+          fetch-depth: 0 # Changed from tree:0 and added fetch-depth
 
-      # This enables task distribution via Nx Cloud
-      # Run this command as early as possible, before dependencies are installed
-      # Learn more at https://nx.dev/ci/reference/nx-cloud-cli#npx-nxcloud-startcirun
-      # Uncomment this line to enable task distribution
-      # - run: npx nx-cloud start-ci-run --distribute-on="3 linux-medium-js" --stop-agents-after="e2e-ci"
-
-      # Cache node_modules
-      - uses: actions/setup-node@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
         with:
           node-version: 20
           cache: 'npm'
 
-      - run: npm ci --legacy-peer-deps
-      - run: npx cypress install
+      - name: Setup pnpm # Add this step for pnpm
+        uses: pnpm/action-setup@v2
+        with:
+          version: 8 # Or your pnpm version
+          dependencies-cache: true
+
+      - name: Install Dependencies
+        run: pnpm install --frozen-lockfile # Use pnpm and frozen-lockfile
+      - name: Install Cypress
+        run: npx cypress install
       - uses: nrwl/nx-set-shas@v4
 
-      # Prepend any command with "nx-cloud record --" to record its logs to Nx Cloud
-      # - run: npx nx-cloud record -- echo Hello World
-      # Nx Affected runs only tasks affected by the changes in this PR/commit. Learn more: https://nx.dev/ci/features/affected
-      # When you enable task distribution, run the e2e-ci task instead of e2e
-      - run: npx nx affected -t lint test build e2e
+      - name: Run Nx Commands
+        run: npx nx affected -t lint test build e2e # Your Nx commands
