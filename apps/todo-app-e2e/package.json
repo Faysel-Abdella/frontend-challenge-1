@@ -6,5 +6,8 @@
     "implicitDependencies": [
       "todo-app"
     ]
+  },
+  "dependencies": {
+    "cypress": "^14.3.2"
   }
 }

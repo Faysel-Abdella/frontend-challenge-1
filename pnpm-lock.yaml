@@ -335,7 +335,11 @@ importers:
         specifier: ^5.4.1
         version: 5.4.19(@types/node@22.15.3)(terser@5.39.0)
 
-  apps/todo-app-e2e: {}
+  apps/todo-app-e2e:
+    dependencies:
+      cypress:
+        specifier: ^14.3.2
+        version: 14.3.2
 
 packages:
 
