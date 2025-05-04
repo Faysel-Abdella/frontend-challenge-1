@@ -28,14 +28,18 @@ jobs:
       - name: Install Dependencies
         run: |
           pnpm install --frozen-lockfile
-          # Silent Cypress install (suppresses warnings)
-          pnpm add -D cypress@latest -w &> /dev/null || true
-          pnpm exec cypress install --quiet
+          # Install Cypress without quiet flag
+          pnpm add -D cypress@latest -w
+          pnpm exec cypress install
 
       - uses: nrwl/nx-set-shas@v4
 
+      - name: Verify Cypress Installation
+        run: |
+          ls -la node_modules/cypress
+          ls -la ~/.cache/Cypress
+
       - name: Run Nx Commands
         run: |
-          # Continue even if e2e fails (if you want to make it optional)
-          pnpm nx affected -t lint test build || true
-          pnpm nx affected -t e2e || echo "E2E tests skipped"
+          pnpm nx affected -t lint test build
+          pnpm nx affected -t e2e
