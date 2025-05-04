@@ -1,4 +1,3 @@
-'use client';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
@@ -38,7 +37,7 @@ export default function TodoForm() {
   } = useTodoForm();
 
   return (
-    <Card className="p-3 md:p-6 mt-16 mb-10 shadow-sm w-full max-w-5xl mx-auto">
+    <Card className="p-3 md:p-6  md:mt-16 mb-6 md:mb-10 shadow-sm w-full max-w-5xl mx-auto">
       <form onSubmit={handleSubmit}>
         <div className="space-y-4">
           <div>

@@ -9,7 +9,7 @@ import {
   SelectValue,
 } from '@/components/ui/select';
 import { Input } from '@/components/ui/input';
-import { Search } from 'lucide-react';
+import { NotebookPen, Search } from 'lucide-react';
 import { Label } from '@/components/ui/label';
 import { cn } from '@/lib/utils';
 import { motion, AnimatePresence } from 'framer-motion';
@@ -88,20 +88,25 @@ export default function TodoList() {
   }, [todos, filter, searchQuery]);
 
   return (
-    <div className="w-full max-w-5xl mx-auto pb-20">
+    <div
+      className={cn(
+        'w-full max-w-5xl mx-auto pb-20',
+        todos.length === 0 && 'hidden'
+      )}
+    >
       <motion.div
         className="mb-4 flex  items-center space-x-4"
         layout // Enable layout animation for width change
       >
         {!isSearching && (
           <motion.h1
-            className="text-xl font-semibold"
+            className="hidden md:block "
             initial={{ opacity: 0, x: 0 }}
             animate={{ opacity: 1, x: 0 }}
             exit={{ opacity: 0, x: 0 }}
             transition={{ duration: 1 }}
           >
-            Your Tasks
+            <p className="font-bold text-2xl">Your Tasks</p>
           </motion.h1>
         )}
         <motion.div
@@ -166,17 +171,18 @@ export default function TodoList() {
               </motion.div>
             ))}
           </AnimatePresence>
-          {filteredTodos.length === 0 && filter === 'all' && !searchQuery && (
-            <p className="text-muted-foreground col-span-full">
-              No tasks yet. Add some!
-            </p>
-          )}
-          {filteredTodos.length === 0 && (filter !== 'all' || searchQuery) && (
-            <p className="text-muted-foreground col-span-full">
-              No todos match your criteria.
-            </p>
-          )}
         </motion.div>
+      )}
+      {filteredTodos.length === 0 && filter === 'all' && !searchQuery && (
+        <div className="flex flex-col py-5 mx-auto w-fit gap-2 items-center justify-center">
+          <div className="flex p-5 w-fit bg-gray-200 rounded-full">
+            <NotebookPen />
+          </div>
+          <p className="text-muted-foreground w-fit">No tasks yet. Add some!</p>
+        </div>
+      )}
+      {filteredTodos.length === 0 && (filter !== 'all' || searchQuery) && (
+        <p className="text-muted-foreground ">No todos match your criteria.</p>
       )}
 
       {layout === 'list' && (

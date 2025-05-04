@@ -39,8 +39,8 @@ const Navbar = () => {
   ];
 
   return (
-    <nav className="max-w-6xl mx-auto lg:mt-4  border-b border-border py-4">
-      <div className=" mx-auto flex items-center justify-between">
+    <nav className="w-full max-w-6xl mx-auto lg:mt-4  border-b border-border py-4">
+      <div className=" mx-auto flex items-center justify-between px-4 lg:px-0">
         <div className="text-xl lg:text-3xl font-serif font-bold text-foreground">
           My Todo App
         </div>

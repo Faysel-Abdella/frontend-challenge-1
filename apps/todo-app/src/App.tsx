@@ -8,6 +8,7 @@ import Tasks from './pages/Tasks';
 import Statistics from './pages/Statistics';
 import Navbar from './components/app-navbar';
 import { RecoilRoot } from 'recoil';
+import Footer from './components/footer';
 
 const App = () => (
   <RecoilRoot>
@@ -15,13 +16,17 @@ const App = () => (
       <Toaster />
       <Sonner />
       <BrowserRouter>
-        <Navbar />
-        <Routes>
-          <Route path="/" element={<Index />} />
-          <Route path="/tasks" element={<Tasks />} />
-          <Route path="/statistics" element={<Statistics />} />
-          <Route path="*" element={<NotFound />} />
-        </Routes>
+        <div className="flex flex-col mx-auto items-center justify-between min-h-screen">
+          <Navbar />
+          <Routes>
+            <Route path="/" element={<Index />} />
+            <Route path="/tasks" element={<Tasks />} />
+            <Route path="/statistics" element={<Statistics />} />
+            <Route path="*" element={<NotFound />} />
+          </Routes>
+
+          <Footer />
+        </div>
       </BrowserRouter>
     </TooltipProvider>
   </RecoilRoot>

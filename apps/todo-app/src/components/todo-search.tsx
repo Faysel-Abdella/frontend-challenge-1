@@ -1,9 +1,14 @@
-
 import { useRecoilState } from 'recoil';
 import { todoSearchState, todoFilterState } from '../store/todoStore';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@/components/ui/select';
 import { STATUS_OPTIONS } from '../types/todo';
 import { Search } from 'lucide-react';
 
@@ -23,9 +28,9 @@ export default function TodoSearch() {
           className="w-full pl-10"
         />
       </div>
-      <Select 
-        value={filter} 
-        onValueChange={(value: any) => setFilter(value)}
+      <Select
+        value={filter}
+        onValueChange={(value: string) => setFilter(value)}
       >
         <SelectTrigger className="w-full md:w-[180px]">
           <SelectValue placeholder="Filter by status" />
@@ -40,8 +45,8 @@ export default function TodoSearch() {
         </SelectContent>
       </Select>
       {(searchQuery || filter !== 'all') && (
-        <Button 
-          variant="outline" 
+        <Button
+          variant="outline"
           onClick={() => {
             setSearchQuery('');
             setFilter('all');
