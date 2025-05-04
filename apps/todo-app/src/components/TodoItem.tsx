@@ -1,20 +1,28 @@
-import React, { useState } from 'react';
+'use client';
+
+import type React from 'react';
+import { useState } from 'react';
 import { useSetRecoilState, useRecoilState } from 'recoil';
-import { Draggable } from '@hello-pangea/dnd';
 import {
   todosState,
   formModeState,
   formDataState,
   formOpenState,
 } from '../store/todoStore';
-import { Todo, TodoLabelColor } from '../types/todo';
-import { Check, Clock, Edit, Tag, Trash2 } from 'lucide-react';
+import type { Todo, TodoLabelColor } from '../types/todo';
+import { Clock, Edit, Tag, Trash2, MoreVertical } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { Card } from '@/components/ui/card';
 import { Checkbox } from '@/components/ui/checkbox';
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from '@/components/ui/dropdown-menu';
 import { format } from 'date-fns';
 import { cn } from '@/lib/utils';
-import { getLabelColorClasses, getTaskColorClass } from '@/lib/colorUtils';
+import { getLabelColorClasses } from '@/lib/colorUtils';
 
 interface TodoItemProps {
   todo: Todo;
@@ -153,23 +161,31 @@ export default function TodoItem({ todo, index }: TodoItemProps) {
                 </p>
               )}
             </div>
-            <div className="flex flex-col space-y-1 h-fit">
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8"
-                onClick={handleEdit}
-              >
-                <Edit className="h-4 w-4" />
-              </Button>
-              <Button
-                variant="ghost"
-                size="icon"
-                className="h-8 w-8 text-destructive"
-                onClick={handleDelete}
-              >
-                <Trash2 className="h-4 w-4" />
-              </Button>
+            <div className="h-fit">
+              <DropdownMenu>
+                <DropdownMenuTrigger asChild>
+                  <Button variant="ghost" size="icon" className="h-8 w-8">
+                    <MoreVertical className="h-4 w-4" />
+                    <span className="sr-only">Open menu</span>
+                  </Button>
+                </DropdownMenuTrigger>
+                <DropdownMenuContent align="end">
+                  <DropdownMenuItem
+                    onClick={handleEdit}
+                    className="cursor-pointer"
+                  >
+                    <Edit className="h-4 w-4 mr-2" />
+                    Edit
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    onClick={handleDelete}
+                    className="cursor-pointer text-destructive"
+                  >
+                    <Trash2 className="h-4 w-4 mr-2" />
+                    Delete
+                  </DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
           <div

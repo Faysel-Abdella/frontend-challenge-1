@@ -49,7 +49,7 @@ export const formModeState = atom<"create" | "edit">({
 
 export const formDataState = atom<{
   id: string
-  title: string
+  title: string 
   description?: string
   dueDate?: string
   dueTime?: string
